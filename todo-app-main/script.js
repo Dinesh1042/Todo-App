@@ -16,6 +16,21 @@ let editValue = "";
 let isCompleted = false;
 let editid = "";
 let delId = "";
+let isLightMode = null;
+
+let darkLocalValue = getDarkModeLocal();
+
+if (darkLocalValue) {
+  isLightMode = getDarkModeLocal().isLightMode;
+
+  if (isLightMode) {
+    body.classList.add("darkMode");
+  } else {
+    body.classList.remove("darkMode");
+  }
+} else {
+  isLightMode = false;
+}
 
 formEl.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -243,10 +258,27 @@ clrcompletedBtn.addEventListener("click", (e) => {
 
 darkModeBtn.addEventListener("click", (e) => {
   body.classList.toggle("darkMode");
+  darkMode();
+  toggleDarkMode(isLightMode);
 });
 
 // drag and drop
 let drapBox = document.getElementById("todo");
+
+function darkMode() {
+  return (isLightMode = isLightMode ? false : true);
+}
+
+function toggleDarkMode(value) {
+  let darkModeValue = { isLightMode: value };
+  return localStorage.setItem("isLightMode", JSON.stringify(darkModeValue));
+}
+
+function getDarkModeLocal() {
+  return localStorage.getItem("isLightMode")
+    ? JSON.parse(localStorage.getItem("isLightMode"))
+    : {};
+}
 
 new Sortable(drapBox, {
   animation: 400,
